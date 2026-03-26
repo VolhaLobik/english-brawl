@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Brawl — Learn English!</title>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   BRAWL STARS DESIGN SYSTEM
+══════════════════════════════════════════ */
+:root {
+  --bs-bg:     #1a1034;
+  --bs-bg2:    #231545;
+  --bs-panel:  #2a1b54;
+  --bs-card:   #32226a;
+  --bs-border: #4a328a;
+  --bs-yellow: #ffe234;
+  --bs-orange: #ff8c00;
+  --bs-red:    #ff3c3c;
+  --bs-green:  #4cff72;
+  --bs-blue:   #3cb0ff;
+  --bs-purple: #c050ff;
+  --bs-gold:   #ffd700;
+  --bs-text:   #fff8e7;
+  --bs-muted:  #b8a8e0;
+  --bs-shadow: #0d0820;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Nunito',sans-serif;
+  background:var(--bs-bg);
+  color:var(--bs-text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 25%, rgba(192,80,255,.18) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 70%, rgba(60,176,255,.14) 0%, transparent 40%);
+}
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.035;
+  background:repeating-linear-gradient(-45deg,#fff 0,#fff 2px,transparent 2px,transparent 14px);
+}
+.section-hidden{display:none!important;}
+
+/* ══ HEADER ══ */
+header {
+  position:sticky; top:0; z-index:200;
+  background:linear-gradient(180deg,#3d1f8a 0%,#2a1464 100%);
+  border-bottom:3px solid var(--bs-yellow);
+  box-shadow:0 4px 20px rgba(0,0,0,.6);
+  padding:0 14px;
+}
+.header-inner {
+  max-width:900px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 0; gap:8px;
+}
+.logo {
+  font-family:'Lilita One',cursive; font-size:1.4rem;
+  color:var(--bs-yellow);
+  -webkit-text-stroke:2px #000;
+  text-shadow:3px 3px 0 #000, 0 0 20px rgba(255,226,52,.35);
+  white-space:nowrap; letter-spacing:.5px;
+}
+.logo span{color:#fff;}
+.hud{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.gem {
+  display:flex;align-items:center;gap:5px;
+  background:linear-gradient(180deg,#4a2a8a,#2d1660);
+  border:2px solid var(--bs-border); border-radius:20px;
+  padding:4px 10px 4px 7px;
+  font-family:'Lilita One',cursive; font-size:.82rem;
+  color:var(--bs-yellow); -webkit-text-stroke:1px #000;
+  box-shadow:0 3px 0 var(--bs-shadow),inset 0 1px 0 rgba(255,255,255,.1);
+  white-space:nowrap;
+}
+.gem-icon{font-size:1.05rem;filter:drop-shadow(1px 1px 0 #000);}
+.xp-wrap {
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(180deg,#4a2a8a,#2d1660);
+  border:2px solid var(--bs-border); border-radius:20px;
+  padding:4px 10px; box-shadow:0 3px 0 var(--bs-shadow);
+}
+.xp-track{width:78px;height:10px;background:#1a0d40;border-radius:5px;overflow:hidden;border:1.5px solid #000;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--bs-yellow),var(--bs-orange));border-radius:5px;transition:width .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 8px rgba(255,226,52,.5);}
+.trophy-badge {
+  display:flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,var(--bs-yellow),var(--bs-orange));
+  border:2.5px solid #000; border-radius:14px; padding:4px 12px;
+  font-family:'Lilita One',cursive; font-size:.85rem; color:#000;
+  box-shadow:0 4px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* ══ APP WRAPPER ══ */
+.app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:18px 12px 90px;}
+
+/* ══ BOTTOM NAV ══ */
+.bottom-nav {
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:linear-gradient(0deg,#150a38 0%,#2d1660 100%);
+  border-top:3px solid var(--bs-yellow);
+  box-shadow:0 -4px 20px rgba(0,0,0,.6);
+  display:flex;justify-content:center;
+}
+.bottom-nav-inner{display:flex;width:100%;max-width:520px;padding:6px 8px 8px;gap:4px;}
+.nav-btn {
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:linear-gradient(180deg,#3d228a,#261455);
+  border:2px solid #5a3aaa; border-radius:12px; padding:8px 4px 6px;
+  cursor:pointer;font-family:inherit;color:var(--bs-muted);
+  transition:all .15s;font-size:.6rem;font-weight:800;
+  box-shadow:0 3px 0 var(--bs-shadow);
+  text-transform:uppercase;letter-spacing:.4px;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-btn .nav-icon{font-size:1.35rem;line-height:1;}
+.nav-btn:hover,.nav-btn.active{
+  background:linear-gradient(180deg,var(--bs-yellow),var(--bs-orange));
+  border-color:#000;color:#000;
+  box-shadow:0 4px 0 #000,0 0 16px rgba(255,226,52,.4);
+  transform:translateY(-2px);
+}
+
+/* ══ CARDS ══ */
+.bs-card {
+  background:linear-gradient(180deg,#3a2478 0%,#2a1860 100%);
+  border:3px solid var(--bs-border); border-radius:18px;
+  padding:18px 16px; margin-bottom:14px;
+  box-shadow:0 6px 0 var(--bs-shadow),inset 0 1px 0 rgba(255,255,255,.07);
+  animation:bsIn .25s ease; position:relative; overflow:hidden;
+}
+.bs-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);
+}
+@keyframes bsIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.bs-card-title{
+  font-family:'Lilita One',cursive; font-size:1.1rem;
+  color:var(--bs-yellow);
+  -webkit-text-stroke:1.5px #000; text-shadow:2px 2px 0 #000;
+  margin-bottom:12px; display:flex; align-items:center; gap:8px;
+}
+
+/* pills */
+.bs-pill{
+  font-family:'Lilita One',cursive;font-size:.68rem;
+  padding:2px 9px;border-radius:20px;border:2px solid #000;
+  box-shadow:0 2px 0 #000;display:inline-block;
+}
+.bs-pill.yellow{background:var(--bs-yellow);color:#000;}
+.bs-pill.green {background:var(--bs-green); color:#000;}
+.bs-pill.blue  {background:var(--bs-blue);  color:#000;}
+.bs-pill.purple{background:var(--bs-purple);color:#fff;}
+.bs-pill.red   {background:var(--bs-red);   color:#fff;}
+.bs-pill.live  {background:var(--bs-red);color:#fff;animation:livePulse 1.5s infinite;}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+/* ══ BUTTONS ══ */
+.bs-btn{
+  font-family:'Lilita One',cursive; font-size:.88rem;
+  padding:10px 18px; border-radius:12px; border:2.5px solid #000;
+  cursor:pointer;transition:all .1s;box-shadow:0 4px 0 #000;
+  text-shadow:1px 1px 0 rgba(0,0,0,.3);
+  display:inline-flex;align-items:center;gap:6px;
+  letter-spacing:.3px;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+}
+.bs-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #000;}
+.bs-btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:0 4px 0 #000;}
+.bs-btn.yellow{background:linear-gradient(180deg,#ffe234,#f0a800);color:#000;}
+.bs-btn.yellow:hover:not(:disabled){background:linear-gradient(180deg,#ffec60,#f5b800);}
+.bs-btn.green {background:linear-gradient(180deg,#4cff72,#1ab840);color:#000;}
+.bs-btn.green:hover:not(:disabled){background:linear-gradient(180deg,#70ff8a,#22cc50);}
+.bs-btn.blue  {background:linear-gradient(180deg,#3cb0ff,#0080d0);color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);}
+.bs-btn.purple{background:linear-gradient(180deg,#c050ff,#8020cc);color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);}
+.bs-btn.red   {background:linear-gradient(180deg,#ff5555,#cc2020);color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);}
+.bs-btn.ghost {background:linear-gradient(180deg,#4a328a,#2d1a60);color:var(--bs-muted);border-color:var(--bs-border);}
+.bs-btn.ghost:hover:not(:disabled){border-color:var(--bs-yellow);color:var(--bs-yellow);}
+
+/* ══ TOPIC CHIPS ══ */
+.topic-grid{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.topic-chip{
+  padding:6px 13px;border-radius:20px;
+  border:2px solid var(--bs-border);
+  background:linear-gradient(180deg,#3d228a,#261455);
+  color:var(--bs-muted);font-family:'Lilita One',cursive;font-size:.76rem;
+  cursor:pointer;transition:all .15s;box-shadow:0 3px 0 var(--bs-shadow);
+  -webkit-tap-highlight-color:transparent;
+}
+.topic-chip:hover,.topic-chip.active{
+  background:linear-gradient(180deg,var(--bs-green),#1ab840);
+  border-color:#000;color:#000;box-shadow:0 3px 0 #000;transform:translateY(-1px);
+}
+
+/* ══ CHAT ══ */
+.chat-box{
+  background:linear-gradient(180deg,#1e1048,#180c38);
+  border:2px solid var(--bs-border); border-radius:14px;
+  padding:14px;height:330px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:12px;
+  margin-bottom:10px;scroll-behavior:smooth;
+}
+.chat-box::-webkit-scrollbar{width:4px;}
+.chat-box::-webkit-scrollbar-thumb{background:var(--bs-border);border-radius:2px;}
+.msg{display:flex;gap:9px;align-items:flex-start;animation:msgIn .2s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{flex-direction:row-reverse;}
+.avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;border:2px solid #000;box-shadow:0 3px 0 #000;
+}
+.msg.ai   .avatar{background:linear-gradient(135deg,#3cb0ff,#8020cc);}
+.msg.user .avatar{background:linear-gradient(135deg,#ffe234,#ff8c00);}
+.bubble{
+  max-width:76%;padding:10px 13px;border-radius:14px;
+  font-size:.88rem;line-height:1.55;
+  border:2px solid rgba(255,255,255,.08);box-shadow:0 3px 0 rgba(0,0,0,.4);
+}
+.msg.ai   .bubble{background:linear-gradient(135deg,#2e1a68,#241460);border-color:#5a3aaa;}
+.msg.user .bubble{background:linear-gradient(135deg,rgba(255,226,52,.18),rgba(255,140,0,.1));border-color:rgba(255,226,52,.4);text-align:right;}
+.bubble .hint{font-size:.75rem;color:var(--bs-muted);margin-top:4px;}
+.bubble .ru  {font-size:.78rem;color:var(--bs-yellow);margin-top:3px;font-style:italic;}
+.bubble strong{color:var(--bs-yellow);}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input{
+  flex:1;background:linear-gradient(180deg,#1e1048,#180c38);
+  border:2px solid var(--bs-border);border-radius:12px;
+  padding:10px 13px;color:var(--bs-text);font-family:inherit;font-size:.9rem;
+  outline:none;transition:border .2s;resize:none;height:44px;
+}
+.chat-input:focus{border-color:var(--bs-yellow);}
+.chat-input::placeholder{color:var(--bs-muted);}
+
+/* ══ EXERCISES ══ */
+.ex-options{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.option-btn{
+  padding:12px 16px;border-radius:12px;
+  border:2.5px solid var(--bs-border);
+  background:linear-gradient(180deg,#3d228a,#261455);
+  color:var(--bs-text);font-family:inherit;font-weight:800;
+  font-size:.9rem;text-align:left;cursor:pointer;transition:all .15s;
+  box-shadow:0 3px 0 var(--bs-shadow);
+  -webkit-tap-highlight-color:transparent;
+}
+.option-btn:hover:not(:disabled){background:linear-gradient(180deg,#5a38aa,#3d2080);border-color:var(--bs-blue);transform:translateY(-1px);box-shadow:0 4px 0 #000;}
+.option-btn.correct{background:linear-gradient(180deg,#2adc50,#1ab840)!important;border-color:#000!important;color:#000!important;box-shadow:0 4px 0 #000!important;}
+.option-btn.wrong  {background:linear-gradient(180deg,#ff4444,#cc2020)!important;border-color:#000!important;color:#fff!important;box-shadow:0 4px 0 #000!important;}
+.option-btn:disabled{cursor:default;transform:none;}
+.fill-input{
+  width:100%;background:linear-gradient(180deg,#1e1048,#180c38);
+  border:2.5px solid var(--bs-border);border-radius:12px;
+  padding:11px 13px;color:var(--bs-text);font-family:inherit;font-size:.95rem;
+  outline:none;transition:border .2s;margin-top:10px;
+}
+.fill-input:focus{border-color:var(--bs-yellow);}
+.fill-input::placeholder{color:var(--bs-muted);}
+.feedback-box{
+  margin-top:10px;padding:12px 14px;border-radius:12px;
+  font-size:.88rem;font-weight:800;line-height:1.5;border:2.5px solid;
+}
+.feedback-box.ok {background:rgba(76,255,114,.1);border-color:rgba(76,255,114,.5);color:var(--bs-green);}
+.feedback-box.bad{background:rgba(255,60,60,.1); border-color:rgba(255,60,60,.5); color:#ff7070;}
+.ex-ru      {font-size:.8rem;color:var(--bs-yellow);margin-bottom:5px;font-weight:800;}
+.ex-question{font-size:1rem;font-weight:800;line-height:1.5;}
+.blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--bs-yellow);text-align:center;color:var(--bs-yellow);font-family:'Lilita One',cursive;}
+
+/* ══ PROGRESS ══ */
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;}
+.prog-card{
+  background:linear-gradient(180deg,#3d228a,#261455);
+  border:2.5px solid var(--bs-border);border-radius:14px;padding:14px;
+  box-shadow:0 4px 0 var(--bs-shadow);text-align:center;
+}
+.prog-label{font-size:.7rem;color:var(--bs-muted);margin-bottom:6px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+.prog-val{font-family:'Lilita One',cursive;font-size:1.8rem;-webkit-text-stroke:1.5px #000;text-shadow:2px 2px 0 #000;}
+.prog-val.y{color:var(--bs-yellow);}
+.prog-val.g{color:var(--bs-green);}
+.prog-val.b{color:var(--bs-blue);}
+.prog-val.p{color:var(--bs-purple);}
+.prog-val.r{color:var(--bs-red);}
+.prog-bar-wrap{height:8px;background:#1a0d40;border-radius:4px;margin-top:8px;overflow:hidden;border:1.5px solid #000;}
+.prog-bar{height:100%;border-radius:3px;transition:width 1s;}
+
+/* ══ VOCAB ══ */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;}
+.vocab-card{
+  background:linear-gradient(180deg,#3d228a,#261455);
+  border:2.5px solid var(--bs-border);border-radius:14px;
+  padding:13px;cursor:pointer;transition:all .15s;text-align:center;
+  box-shadow:0 4px 0 var(--bs-shadow);
+}
+.vocab-card:hover{border-color:var(--bs-purple);transform:translateY(-3px);box-shadow:0 6px 0 #000,0 0 16px rgba(192,80,255,.3);}
+.vocab-card .vc-en{font-family:'Lilita One',cursive;font-size:.95rem;color:var(--bs-yellow);-webkit-text-stroke:1px #000;text-shadow:1px 1px 0 #000;}
+.vocab-card .vc-ru{font-size:.76rem;color:var(--bs-muted);margin-top:3px;}
+.vocab-card .vc-tap{font-size:.66rem;color:var(--bs-green);margin-top:5px;font-weight:800;}
+
+/* ══ SPEAKING ══ */
+.speak-prompt-box{
+  background:linear-gradient(180deg,#1e1048,#180c38);
+  border:3px solid var(--bs-yellow);border-radius:16px;padding:20px;
+  text-align:center;min-height:100px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:14px;
+  box-shadow:0 5px 0 #000,inset 0 1px 0 rgba(255,226,52,.1);
+}
+.speak-prompt-ru{font-size:.8rem;color:var(--bs-yellow);font-weight:800;}
+.speak-prompt-en{font-family:'Lilita One',cursive;font-size:1.25rem;color:#fff;-webkit-text-stroke:1.5px #000;text-shadow:2px 2px 0 #000;line-height:1.3;}
+.speak-prompt-tip{font-size:.74rem;color:var(--bs-muted);}
+.speak-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+.rec-indicator{text-align:center;padding:10px;margin-bottom:10px;background:rgba(255,60,60,.12);border:2px solid rgba(255,60,60,.4);border-radius:12px;}
+.rec-blink{font-family:'Lilita One',cursive;font-size:1rem;color:var(--bs-red);-webkit-text-stroke:1px #000;animation:recBlink 1s infinite;}
+@keyframes recBlink{0%,100%{opacity:1}50%{opacity:.35}}
+.transcript-box{background:linear-gradient(180deg,#1e1048,#180c38);border:2px solid var(--bs-border);border-radius:12px;padding:13px;margin-bottom:10px;}
+.transcript-label{font-size:.7rem;color:var(--bs-muted);font-weight:800;text-transform:uppercase;margin-bottom:5px;}
+.transcript-text{font-size:.95rem;font-weight:800;color:var(--bs-text);}
+.speak-fb-card{background:linear-gradient(180deg,#2e1a68,#241460);border:2.5px solid var(--bs-border);border-radius:14px;padding:15px;line-height:1.7;font-size:.87rem;box-shadow:0 4px 0 var(--bs-shadow);}
+.fb-section{margin-bottom:9px;}
+.fb-label{font-size:.66rem;font-weight:800;color:var(--bs-yellow);text-transform:uppercase;letter-spacing:.6px;-webkit-text-stroke:.5px #000;margin-bottom:2px;font-family:'Lilita One',cursive;}
+.score-wrap{margin-top:12px;}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.score-lbl{font-family:'Lilita One',cursive;font-size:.9rem;color:var(--bs-muted);}
+.score-num{font-family:'Lilita One',cursive;font-size:1.5rem;-webkit-text-stroke:1.5px #000;text-shadow:2px 2px 0 #000;}
+
+/* ══ LOADING ══ */
+.dots span{animation:blink 1.4s infinite;display:inline-block;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* ══ XP POPUP ══ */
+.xp-popup{
+  position:fixed;top:70px;right:14px;z-index:999;pointer-events:none;
+  background:linear-gradient(135deg,var(--bs-yellow),var(--bs-orange));
+  color:#000;font-family:'Lilita One',cursive;font-size:1rem;
+  padding:7px 18px;border-radius:20px;
+  border:2.5px solid #000;box-shadow:0 4px 0 #000;
+  animation:xpPop .9s ease forwards;
+}
+@keyframes xpPop{
+  0%  {opacity:0;transform:translateY(8px) scale(.8)}
+  25% {opacity:1;transform:translateY(-4px) scale(1.1)}
+  60% {opacity:1;transform:none}
+  100%{opacity:0;transform:translateY(-22px) scale(.9)}
+}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:500px){
+  .logo{font-size:1.1rem;}
+  .gem{font-size:.74rem;padding:3px 8px 3px 5px;}
+  .xp-track{width:52px;}
+  .bs-btn{font-size:.8rem;padding:9px 13px;}
+  .hud{gap:5px;}
+  .trophy-badge{font-size:.78rem;padding:3px 9px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">⚡English<span>Brawl</span></div>
+    <div class="hud">
+      <div class="gem"><span class="gem-icon">🔥</span><span id="streak">0</span></div>
+      <div class="xp-wrap">
+        <span class="gem-icon">⭐</span>
+        <span id="xpVal" style="font-family:'Lilita One',cursive;font-size:.8rem;color:var(--bs-yellow);-webkit-text-stroke:1px #000;white-space:nowrap;">0 XP</span>
+        <div class="xp-track"><div class="xp-fill" id="xpBar" style="width:0%"></div></div>
+      </div>
+      <div class="trophy-badge">🏆 <span id="levelBadge">A1</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- ══ CHAT TAB ══ -->
+  <div id="tab-chat">
+    <div class="bs-card">
+      <div class="bs-card-title">🤖 AI English Tutor <span class="bs-pill live">● LIVE</span></div>
+      <p style="font-size:.82rem;color:var(--bs-muted);margin-bottom:12px;line-height:1.5;">Chat in English — Max fixes mistakes, teaches words, gives Russian hints!</p>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:.7rem;color:var(--bs-muted);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Choose topic:</div>
+        <div class="topic-grid" id="topicGrid">
+          <button class="topic-chip active" onclick="setTopic(this,'Free talk')">🗣️ Free talk</button>
+          <button class="topic-chip" onclick="setTopic(this,'School life')">🏫 School</button>
+          <button class="topic-chip" onclick="setTopic(this,'Gaming & tech')">🎮 Gaming</button>
+          <button class="topic-chip" onclick="setTopic(this,'Movies & music')">🎬 Movies</button>
+          <button class="topic-chip" onclick="setTopic(this,'Sports')">⚽ Sports</button>
+          <button class="topic-chip" onclick="setTopic(this,'Food & daily life')">🍕 Food</button>
+        </div>
+      </div>
+      <div class="chat-box" id="chatBox"></div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="Type in English… (или по-русски!)" onkeydown="chatKeydown(event)"></textarea>
+        <button class="bs-btn yellow" id="sendBtn" onclick="sendChat()" style="height:44px;align-self:flex-end;">SEND ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EXERCISES TAB ══ -->
+  <div id="tab-exercises" class="section-hidden">
+    <div class="bs-card">
+      <div class="bs-card-title">📝 Exercise <span class="bs-pill yellow" id="exTypeBadge">Loading…</span></div>
+      <div id="exContent"><div style="color:var(--bs-muted);font-size:.9rem;">Loading exercise… <span class="dots"><span>.</span><span>.</span><span>.</span></span></div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="bs-btn yellow" onclick="loadExercise()">⟳ New</button>
+      <button class="bs-btn blue"   onclick="loadExercise('grammar')">Grammar</button>
+      <button class="bs-btn green"  onclick="loadExercise('vocab')">Vocab</button>
+      <button class="bs-btn purple" onclick="loadExercise('fill')">Fill Blank</button>
+    </div>
+  </div>
+
+  <!-- ══ VOCAB TAB ══ -->
+  <div id="tab-vocab" class="section-hidden">
+    <div class="bs-card">
+      <div class="bs-card-title">📚 Word Bank <span class="bs-pill green" id="vocabCount">0 words</span></div>
+      <p style="font-size:.82rem;color:var(--bs-muted);margin-bottom:14px;">Tap any card to test yourself!</p>
+      <div class="vocab-grid" id="vocabGrid"><div style="color:var(--bs-muted);font-size:.86rem;">Start chatting — words appear here!</div></div>
+    </div>
+    <div class="bs-card">
+      <div class="bs-card-title">🌟 Word of the Day</div>
+      <div id="wotd" style="color:var(--bs-muted);">Loading… <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+    </div>
+  </div>
+
+  <!-- ══ SPEAKING TAB ══ -->
+  <div id="tab-speaking" class="section-hidden">
+    <div class="bs-card">
+      <div class="bs-card-title">🎤 Speaking Arena <span class="bs-pill green">NEW</span></div>
+      <p style="font-size:.82rem;color:var(--bs-muted);margin-bottom:14px;line-height:1.5;">
+        Speak English out loud! AI scores your pronunciation and gives tips.<br>
+        <span style="color:var(--bs-yellow);font-size:.77rem;">🇷🇺 Говори вслух — AI оценит произношение!</span>
+      </p>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.7rem;color:var(--bs-muted);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Mode:</div>
+        <div class="topic-grid">
+          <button class="topic-chip active" id="modeRepeat" onclick="setSpeakMode('repeat',this)">🔁 Repeat</button>
+          <button class="topic-chip" id="modeShadow" onclick="setSpeakMode('shadow',this)">👥 Shadow</button>
+          <button class="topic-chip" id="modeAnswer" onclick="setSpeakMode('answer',this)">💬 Answer</button>
+          <button class="topic-chip" id="modeStory"  onclick="setSpeakMode('story',this)">📖 Story</button>
+        </div>
+      </div>
+      <div class="speak-prompt-box">
+        <div class="speak-prompt-ru"  id="speakPromptRu"></div>
+        <div class="speak-prompt-en"  id="speakPromptEn"><span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+        <div class="speak-prompt-tip" id="speakPromptTip"></div>
+      </div>
+      <div class="speak-btns">
+        <button id="listenBtn" class="bs-btn blue"   onclick="listenPhrase()">🔊 Listen</button>
+        <button id="recordBtn" class="bs-btn yellow"  onclick="toggleRecord()">🎤 Speak!</button>
+        <button class="bs-btn ghost" onclick="loadSpeakPrompt()">⟳ New</button>
+      </div>
+      <div id="recordingIndicator" style="display:none;">
+        <div class="rec-indicator">
+          <div class="rec-blink">🔴 RECORDING — speak clearly!</div>
+          <div style="font-size:.74rem;color:var(--bs-muted);margin-top:3px;">🇷🇺 Говорите громко и чётко</div>
+        </div>
+      </div>
+      <div id="transcriptBox" style="display:none;" class="transcript-box">
+        <div class="transcript-label">You said:</div>
+        <div class="transcript-text" id="transcriptText"></div>
+      </div>
+      <div id="speakFeedback" style="display:none;"></div>
+      <div id="scoreSection" style="display:none;" class="score-wrap">
+        <div class="score-row">
+          <span class="score-lbl">Your Score</span>
+          <span class="score-num" id="scoreNum" style="color:var(--bs-yellow);">—</span>
+        </div>
+        <div class="prog-bar-wrap" style="height:12px;">
+          <div id="scoreFill" class="prog-bar" style="width:0%;background:linear-gradient(90deg,var(--bs-orange),var(--bs-green));"></div>
+        </div>
+        <div id="scoreLabel" style="font-size:.74rem;color:var(--bs-muted);margin-top:4px;font-weight:800;"></div>
+      </div>
+    </div>
+
+    <div class="bs-card">
+      <div class="bs-card-title">📈 Speaking Stats</div>
+      <div class="prog-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="prog-card"><div class="prog-label">Attempts</div><div class="prog-val r" id="spAttempts">0</div></div>
+        <div class="prog-card"><div class="prog-label">Avg Score</div><div class="prog-val b" id="spAvg">—</div></div>
+        <div class="prog-card"><div class="prog-label">Best</div><div class="prog-val y" id="spBest">—</div></div>
+      </div>
+    </div>
+
+    <div class="bs-card" style="border-color:rgba(255,226,52,.3);">
+      <div class="bs-card-title">💡 Pro Tips</div>
+      <div style="font-size:.82rem;color:var(--bs-muted);line-height:1.9;">
+        🔊 <strong style="color:var(--bs-text);">Listen first</strong> — copy the rhythm &amp; tone<br>
+        🐢 <strong style="color:var(--bs-text);">Speak slowly</strong> — speed comes later!<br>
+        📱 <strong style="color:var(--bs-text);">Phone close</strong> to mouth for best results<br>
+        🔁 <strong style="color:var(--bs-text);">Repeat 3×</strong> to lock a phrase in<br>
+        <span style="color:var(--bs-yellow);font-size:.77rem;">🇷🇺 Сначала слушай — потом повторяй медленно и чётко.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROGRESS TAB ══ -->
+  <div id="tab-progress" class="section-hidden">
+    <div class="bs-card">
+      <div class="bs-card-title">📊 Your Stats</div>
+      <div class="prog-grid">
+        <div class="prog-card"><div class="prog-label">⭐ Total XP</div><div class="prog-val y" id="pXP">0</div><div class="prog-bar-wrap"><div class="prog-bar" id="pXPBar" style="width:0%;background:linear-gradient(90deg,var(--bs-yellow),var(--bs-orange))"></div></div></div>
+        <div class="prog-card"><div class="prog-label">💬 Messages</div><div class="prog-val p" id="pMsgs">0</div></div>
+        <div class="prog-card"><div class="prog-label">📝 Exercises</div><div class="prog-val b" id="pEx">0</div></div>
+        <div class="prog-card"><div class="prog-label">✅ Correct</div><div class="prog-val g" id="pCorrect">0</div></div>
+        <div class="prog-card"><div class="prog-label">📚 Words</div><div class="prog-val" style="color:#fff;font-family:'Lilita One',cursive;font-size:1.8rem;-webkit-text-stroke:1.5px #000;" id="pWords">0</div></div>
+        <div class="prog-card"><div class="prog-label">🔥 Streak</div><div style="font-size:1.9rem;text-align:center;line-height:1.1;">🔥</div><div class="prog-val r" id="pStreak" style="text-align:center;font-size:1.3rem;">0 days</div></div>
+      </div>
+    </div>
+    <div class="bs-card">
+      <div class="bs-card-title">🏆 Level Journey: A1 → B2</div>
+      <div id="levelPath" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:4px;"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="nav-btn active" onclick="showTab('chat')"     id="nav-chat">    <span class="nav-icon">💬</span>Chat</button>
+    <button class="nav-btn"        onclick="showTab('exercises')" id="nav-exercises"><span class="nav-icon">📝</span>Train</button>
+    <button class="nav-btn"        onclick="showTab('vocab')"     id="nav-vocab">   <span class="nav-icon">📚</span>Words</button>
+    <button class="nav-btn"        onclick="showTab('speaking')"  id="nav-speaking"> <span class="nav-icon">🎤</span>Speak</button>
+    <button class="nav-btn"        onclick="showTab('progress')"  id="nav-progress"> <span class="nav-icon">🏆</span>Stats</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE + CLOUD STORAGE
+// ══════════════════════════════════════════
+const DEFAULT_STATE = {xp:0,level:'A1',streak:0,msgs:0,exercises:0,correct:0,words:{},lastDay:null,chatHistory:[]};
+const DEFAULT_SPEAK = {attempts:0,scores:[],best:0};
+
+let state = {...DEFAULT_STATE};
+let currentTopic='Free talk', exLoading=false;
+const LEVELS=['A1','A2','B1','B2'];
+const XP_PER_LEVEL=[0,200,600,1400];
+
+// ── Cloud save (debounced so rapid XP gains don't spam) ──
+let _saveTimer=null;
+function save(){
+  clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(async()=>{
+    try{ await window.storage.set('eq_state', JSON.stringify(state)); }
+    catch(e){ /* fallback silent */ }
+  }, 800);
+}
+
+async function saveSpeak(spk){
+  try{ await window.storage.set('eq_speak', JSON.stringify(spk)); }catch(e){}
+}
+
+// ── Show/hide loading overlay ──
+function showLoader(msg){
+  let el=document.getElementById('cloudLoader');
+  if(!el){
+    el=document.createElement('div');el.id='cloudLoader';
+    el.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1034;font-family:"Lilita One",cursive;';
+    el.innerHTML=`<div style="font-size:3rem;margin-bottom:12px;animation:spin 1.5s linear infinite;">⚡</div>
+      <div style="font-size:1.2rem;color:#ffe234;-webkit-text-stroke:1.5px #000;text-shadow:2px 2px 0 #000;" id="loaderMsg">Loading…</div>
+      <div style="font-size:.8rem;color:#b8a8e0;margin-top:8px;">Syncing your progress from the cloud</div>
+      <style>@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style>`;
+    document.body.appendChild(el);
+  }
+  document.getElementById('loaderMsg').textContent=msg;
+  el.style.display='flex';
+}
+function hideLoader(){ const el=document.getElementById('cloudLoader'); if(el) el.style.display='none'; }
+
+function addXP(n){
+  state.xp+=n;
+  let i=LEVELS.indexOf(state.level);
+  if(i<3&&state.xp>=XP_PER_LEVEL[i+1]){state.level=LEVELS[i+1];showXPPopup('🎉 LEVEL UP! '+state.level);}
+  save();updateHeader();updateProgress();
+  showXPPopup('+'+n+' XP');
+}
+
+function showXPPopup(txt){
+  const el=document.createElement('div');
+  el.className='xp-popup';el.textContent=txt;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),950);
+}
+
+function updateHeader(){
+  document.getElementById('xpVal').textContent=state.xp+' XP';
+  document.getElementById('streak').textContent=state.streak;
+  document.getElementById('levelBadge').textContent=state.level;
+  let i=LEVELS.indexOf(state.level);
+  let nxt=i<3?XP_PER_LEVEL[i+1]:XP_PER_LEVEL[3]+500;
+  let pct=Math.min(100,((state.xp-XP_PER_LEVEL[i])/(nxt-XP_PER_LEVEL[i]))*100);
+  document.getElementById('xpBar').style.width=pct+'%';
+}
+
+function updateProgress(){
+  document.getElementById('pXP').textContent=state.xp;
+  document.getElementById('pMsgs').textContent=state.msgs;
+  document.getElementById('pEx').textContent=state.exercises;
+  document.getElementById('pCorrect').textContent=state.correct;
+  document.getElementById('pWords').textContent=Object.keys(state.words).length;
+  document.getElementById('pStreak').textContent=state.streak+' days';
+  document.getElementById('pXPBar').style.width=Math.min(100,(state.xp/1400)*100)+'%';
+  const lp=document.getElementById('levelPath');
+  lp.innerHTML=LEVELS.map((l,i)=>{
+    const done=XP_PER_LEVEL[i]<=state.xp, cur=l===state.level;
+    return `<span style="display:inline-flex;align-items:center;gap:5px;">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;
+        font-family:'Lilita One',cursive;font-size:.95rem;border:3px solid #000;box-shadow:0 3px 0 #000;
+        background:${cur?'linear-gradient(135deg,#ffe234,#ff8c00)':done?'linear-gradient(135deg,#4cff72,#1ab840)':'linear-gradient(180deg,#3d228a,#261455)'};
+        color:${cur||done?'#000':'#5a3aaa'};">${l}</span>
+      ${i<3?'<span style="color:#5a3aaa;font-size:1.1rem;font-weight:900;">→</span>':''}
+    </span>`;
+  }).join('');
+}
+
+function updateVocab(){
+  const grid=document.getElementById('vocabGrid');
+  const words=Object.entries(state.words);
+  document.getElementById('vocabCount').textContent=words.length+' words';
+  if(!words.length){grid.innerHTML='<div style="color:var(--bs-muted);font-size:.86rem;">Start chatting — words appear here!</div>';return;}
+  grid.innerHTML=words.map(([en,ru])=>`
+    <div class="vocab-card" onclick="practiceWord('${en}','${ru}')">
+      <div class="vc-en">${en}</div><div class="vc-ru">${ru}</div><div class="vc-tap">⚔️ Practice</div>
+    </div>`).join('');
+}
+
+// ── TABS ──
+function showTab(t){
+  ['chat','exercises','vocab','speaking','progress'].forEach(id=>{
+    document.getElementById('tab-'+id).classList.toggle('section-hidden',id!==t);
+  });
+  document.querySelectorAll('.nav-btn').forEach((el,i)=>{
+    el.classList.toggle('active',['chat','exercises','vocab','speaking','progress'][i]===t);
+  });
+  if(t==='vocab')    updateVocab();
+  if(t==='progress') updateProgress();
+  if(t==='exercises'&&document.getElementById('exContent').textContent.includes('Loading')) loadExercise();
+  if(t==='speaking'&&!window._speakLoaded){window._speakLoaded=true;loadSpeakPrompt();}
+}
+
+function setTopic(el,t){
+  currentTopic=t;
+  document.querySelectorAll('#topicGrid .topic-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════════
+const SYSTEM_PROMPT=`You are "Max", a fun English tutor for a 13-year-old Russian boy. Level: A1-A2, target B2.
+Reply rules (ALWAYS follow):
+1. Short simple English sentences (A1-A2 level). Max 80 words total.
+2. End with: 🇷🇺 [1 sentence Russian translation of key point]
+3. If mistake: ✏️ [short correction]
+4. One new word: 📖 **word** = перевод
+5. Ask one follow-up question.
+6. Be fun, use emojis, mention gaming/sport/memes.
+7. Topic: `;
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const msg=input.value.trim();
+  if(!msg||document.getElementById('sendBtn').disabled)return;
+  input.value='';
+  appendMsg('user',msg,'👤');
+  state.msgs++;save();addXP(2);
+  const today=new Date().toDateString();
+  if(state.lastDay!==today){
+    state.lastDay===new Date(Date.now()-86400000).toDateString()?state.streak++:state.streak=1;
+    state.lastDay=today;save();
+  }
+  document.getElementById('sendBtn').disabled=true;
+  const loadEl=appendMsg('ai','<span class="dots"><span>●</span><span>●</span><span>●</span></span>','🤖');
+  const bubble=loadEl.querySelector('.bubble');
+
+  state.chatHistory.push({role:'user',content:msg});
+  // Keep only last 6 messages to stay fast
+  if(state.chatHistory.length>6)state.chatHistory=state.chatHistory.slice(-6);
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:300,
+        stream:true,
+        system:SYSTEM_PROMPT+currentTopic,
+        messages:state.chatHistory
+      })
+    });
+
+    if(!res.ok){throw new Error('HTTP '+res.status);}
+
+    // Stream the response word by word
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let fullReply='';
+    bubble.innerHTML='';
+
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      const chunk=decoder.decode(value,{stream:true});
+      const lines=chunk.split('\n');
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        const data=line.slice(6).trim();
+        if(data==='[DONE]')continue;
+        try{
+          const evt=JSON.parse(data);
+          if(evt.type==='content_block_delta'&&evt.delta?.type==='text_delta'){
+            fullReply+=evt.delta.text;
+            bubble.innerHTML=formatMsg(fullReply);
+            // auto-scroll
+            const box=document.getElementById('chatBox');
+            box.scrollTop=box.scrollHeight;
+          }
+        }catch(e){}
+      }
+    }
+
+    if(!fullReply){throw new Error('Empty response');}
+    state.chatHistory.push({role:'assistant',content:fullReply});save();
+    const vm=[...fullReply.matchAll(/\*\*(.+?)\*\*\s*=\s*([^\n]+)/g)];
+    vm.forEach(([,en,ru])=>{const c=en.replace(/[^a-zA-Z\s'-]/g,'').trim().toLowerCase();if(c)state.words[c]=ru.trim();});
+    save();
+    addXP(3);
+  }catch(e){
+    bubble.innerHTML=`<span style="color:#ff7070;">⚠️ Connection error. Please try again!<br><span style="font-size:.75rem;color:var(--bs-muted);">${e.message}</span></span>`;
+  }
+  document.getElementById('sendBtn').disabled=false;
+  updateHeader();
+}
+
+function formatMsg(text){
+  return text
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/✏️ Correction:(.*?)(?=📖|🇷🇺|$)/gs,'<div class="hint">✏️ Correction:$1</div>')
+    .replace(/🇷🇺 Hint:(.*?)(?=📖|✏️|$)/gs,'<div class="ru">🇷🇺 $1</div>')
+    .replace(/📖 New words:(.*?)(?=\n\n|$)/gs,'<div class="hint">📖$1</div>')
+    .replace(/\n/g,'<br>');
+}
+
+function appendMsg(role,html,avatar){
+  const box=document.getElementById('chatBox');
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML=`<div class="avatar">${avatar}</div><div class="bubble">${html}</div>`;
+  box.appendChild(div);box.scrollTop=box.scrollHeight;
+  return div;
+}
+function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+
+// ══════════════════════════════════════════
+// EXERCISES
+// ══════════════════════════════════════════
+let currentEx=null;
+
+async function loadExercise(type){
+  if(exLoading)return;exLoading=true;
+  const exC=document.getElementById('exContent'),exB=document.getElementById('exTypeBadge');
+  exC.innerHTML='<div style="color:var(--bs-muted);">Loading… <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>';
+  const types=['mcq','fill','translate'];
+  if(!type)type=types[Math.floor(Math.random()*types.length)];
+  if(type==='grammar')type='mcq';
+  if(type==='vocab')type=['fill','translate'][Math.floor(Math.random()*2)];
+  const prompt=`Create an English exercise for a 13-year-old Russian speaker at A1-A2 level, type: "${type}".
+Return ONLY valid JSON (no markdown, no explanation), format:
+For "mcq": {"type":"mcq","ru":"Russian translation of question","question":"Question in English","options":["A","B","C","D"],"answer":0,"explanation":"Short explanation in English + Russian"}
+For "fill": {"type":"fill","ru":"Перевод предложения","sentence":"Sentence with _____ for missing word","answer":"missing word","hint":"Russian hint for the missing word"}
+For "translate": {"type":"translate","ru":"Русское предложение для перевода","english":"Correct English translation","hint":"Grammar tip in Russian"}
+Keep it simple. A1-A2 level. Topics: school, food, sport, daily life, hobbies, numbers, colors, family.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
+    currentEx=JSON.parse(raw);
+    renderExercise(currentEx,exC,exB);
+    state.exercises++;save();updateProgress();
+  }catch(e){exC.innerHTML='<div style="color:var(--bs-red);">Could not load. Try again!</div>';}
+  exLoading=false;
+}
+
+function renderExercise(ex,container,badge){
+  if(ex.type==='mcq'){
+    badge.textContent='Multiple Choice';badge.className='bs-pill blue';
+    container.innerHTML=`<div class="ex-ru">${ex.ru}</div><div class="ex-question">${ex.question}</div>
+      <div class="ex-options">${ex.options.map((o,i)=>`<button class="option-btn" onclick="checkMCQ(${i},${ex.answer},this,'${encodeURIComponent(ex.explanation)}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>`;
+  }else if(ex.type==='fill'){
+    badge.textContent='Fill the Blank';badge.className='bs-pill yellow';
+    container.innerHTML=`<div class="ex-ru">${ex.ru}</div>
+      <div class="ex-question">${ex.sentence.replace('_____','<span class="blank">_____</span>')}</div>
+      <div style="font-size:.78rem;color:var(--bs-yellow);margin-top:6px;font-weight:800;">💡 ${ex.hint}</div>
+      <input class="fill-input" id="fillAns" placeholder="Type the missing word…" onkeydown="if(event.key==='Enter')checkFill('${encodeURIComponent(ex.answer)}')">
+      <button class="bs-btn green" style="margin-top:10px;" onclick="checkFill('${encodeURIComponent(ex.answer)}')">CHECK ✓</button>
+      <div id="fillFeedback"></div>`;
+  }else if(ex.type==='translate'){
+    badge.textContent='Translate';badge.className='bs-pill purple';
+    container.innerHTML=`<div style="font-size:.72rem;color:var(--bs-muted);margin-bottom:5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;">Translate to English:</div>
+      <div class="ex-question" style="color:var(--bs-yellow);">🇷🇺 ${ex.ru}</div>
+      <div style="font-size:.76rem;color:var(--bs-muted);margin-top:6px;font-weight:800;">💡 ${ex.hint||''}</div>
+      <input class="fill-input" id="transAns" placeholder="Type the English translation…" onkeydown="if(event.key==='Enter')checkTranslate('${encodeURIComponent(ex.english)}')">
+      <button class="bs-btn green" style="margin-top:10px;" onclick="checkTranslate('${encodeURIComponent(ex.english)}')">CHECK ✓</button>
+      <div id="transFeedback"></div>`;
+  }
+}
+
+function checkMCQ(chosen,correct,btn,expEnc){
+  const explanation=decodeURIComponent(expEnc);
+  document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);
+  if(chosen===correct){btn.classList.add('correct');appendFeedback(btn.parentElement,true,'✅ CORRECT! '+explanation);state.correct++;addXP(10);}
+  else{btn.classList.add('wrong');document.querySelectorAll('.option-btn')[correct].classList.add('correct');appendFeedback(btn.parentElement,false,'❌ Wrong. '+explanation);addXP(2);}
+  save();
+}
+function appendFeedback(parent,ok,msg){
+  const fb=document.createElement('div');
+  fb.className='feedback-box '+(ok?'ok':'bad');
+  fb.innerHTML=msg+`<br><br><button class="bs-btn yellow" onclick="loadExercise()">NEXT ➤</button>`;
+  parent.parentElement.appendChild(fb);
+}
+function checkFill(ansEnc){
+  const ans=decodeURIComponent(ansEnc).toLowerCase().trim();
+  const input=document.getElementById('fillAns');
+  const val=(input.value||'').toLowerCase().trim();
+  const fb=document.getElementById('fillFeedback');
+  input.disabled=true;
+  if(val===ans||val.includes(ans)||ans.includes(val)){fb.className='feedback-box ok';fb.innerHTML=`✅ CORRECT! Answer: <strong>${decodeURIComponent(ansEnc)}</strong><br><br><button class="bs-btn yellow" onclick="loadExercise()">NEXT ➤</button>`;state.correct++;addXP(10);}
+  else{fb.className='feedback-box bad';fb.innerHTML=`❌ Answer: <strong>${decodeURIComponent(ansEnc)}</strong><br><br><button class="bs-btn yellow" onclick="loadExercise()">NEXT ➤</button>`;addXP(2);}
+  save();
+}
+function checkTranslate(engEnc){
+  const correct=decodeURIComponent(engEnc).toLowerCase().replace(/[.,!?]/g,'').trim();
+  const input=document.getElementById('transAns');
+  const val=(input.value||'').toLowerCase().replace(/[.,!?]/g,'').trim();
+  const fb=document.getElementById('transFeedback');
+  input.disabled=true;
+  const cW=correct.split(' '),vW=val.split(' ');
+  const ok=cW.filter(w=>vW.includes(w)).length>=Math.ceil(cW.length*.6);
+  if(ok){fb.className='feedback-box ok';fb.innerHTML=`✅ GREAT! Answer: <strong>${decodeURIComponent(engEnc)}</strong><br><br><button class="bs-btn yellow" onclick="loadExercise()">NEXT ➤</button>`;state.correct++;addXP(12);}
+  else{fb.className='feedback-box bad';fb.innerHTML=`❌ Answer: <strong>${decodeURIComponent(engEnc)}</strong><br><br><button class="bs-btn yellow" onclick="loadExercise()">NEXT ➤</button>`;addXP(2);}
+  save();
+}
+
+// ══════════════════════════════════════════
+// VOCAB
+// ══════════════════════════════════════════
+function practiceWord(en,ru){
+  showTab('exercises');
+  document.getElementById('exTypeBadge').textContent='Word Battle';
+  document.getElementById('exContent').innerHTML=`
+    <div style="text-align:center;padding:12px;">
+      <div style="font-family:'Lilita One',cursive;font-size:2rem;color:var(--bs-yellow);-webkit-text-stroke:2px #000;text-shadow:3px 3px 0 #000;">${en}</div>
+      <div style="font-size:.88rem;color:var(--bs-muted);margin:8px 0;font-weight:800;">What does this mean in Russian?</div>
+    </div>
+    <input class="fill-input" id="fillAns" placeholder="Type the Russian translation…" onkeydown="if(event.key==='Enter')checkFill('${encodeURIComponent(ru)}')">
+    <button class="bs-btn green" style="margin-top:10px;" onclick="checkFill('${encodeURIComponent(ru)}')">CHECK ✓</button>
+    <div id="fillFeedback"></div>`;
+}
+
+async function loadWordOfDay(){
+  const wotd=document.getElementById('wotd');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,
+        messages:[{role:'user',content:`Give a "word of the day" for a Russian 13-year-old learning English at A1-A2.
+Return ONLY JSON: {"word":"English word","translation":"Русский перевод","example":"Simple English example sentence","tip":"Short memory tip in Russian"}`}]})
+    });
+    const data=await res.json();
+    let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
+    const w=JSON.parse(raw);
+    wotd.innerHTML=`
+      <div style="font-family:'Lilita One',cursive;font-size:1.8rem;color:var(--bs-yellow);-webkit-text-stroke:2px #000;text-shadow:2px 2px 0 #000;">${w.word}</div>
+      <div style="color:var(--bs-green);font-weight:800;margin:5px 0;font-size:.9rem;">🇷🇺 ${w.translation}</div>
+      <div style="font-size:.84rem;color:var(--bs-muted);margin:5px 0;font-style:italic;">"${w.example}"</div>
+      <div style="font-size:.78rem;color:var(--bs-yellow);font-weight:800;margin-bottom:10px;">💡 ${w.tip}</div>
+      <button class="bs-btn green" onclick="addWordToBank('${w.word.toLowerCase()}','${w.translation.replace(/'/g,"\\'")}')">+ Add to Word Bank</button>`;
+  }catch(e){wotd.innerHTML='<div style="color:var(--bs-muted);">Could not load today\'s word.</div>';}
+}
+function addWordToBank(en,ru){state.words[en]=ru;save();updateVocab();addXP(5);}
+
+// ══════════════════════════════════════════
+// SPEAKING
+// ══════════════════════════════════════════
+let speakMode='repeat',currentSpeakPrompt=null,recognition=null,isRecording=false;
+let speakStats={...DEFAULT_SPEAK};
+
+const SPEAK_MODES={
+  repeat:{prompt:`Give a short English phrase for a 13-year-old Russian speaker at A1-A2 level to REPEAT aloud.
+Return ONLY JSON: {"en":"The English phrase (max 10 words)","ru":"Russian translation","tip":"Pronunciation tip in Russian","phonetic":"Simple phonetic guide e.g. [hau ar yu]"}
+Make it a useful everyday phrase.`},
+  shadow:{prompt:`Give a short English dialogue line for SHADOWING for a 13-year-old Russian speaker at A1-A2.
+Return ONLY JSON: {"en":"A natural conversational sentence (8-12 words)","ru":"Russian translation","tip":"Intonation tip in Russian","phonetic":"Simple phonetic guide"}
+Use contractions (I'm, don't, it's etc).`},
+  answer:{prompt:`Give a simple English question for a 13-year-old Russian speaker at A1-A2 to ANSWER aloud.
+Return ONLY JSON: {"en":"Simple question in English","ru":"Russian translation","tip":"Hint to answer simply in Russian","phonetic":"","example":"Simple example answer"}
+Topics: hobbies, school, food, family, sport.`},
+  story:{prompt:`Give a simple English sentence starter for a 13-year-old Russian speaker at A1-A2 to continue speaking.
+Return ONLY JSON: {"en":"Yesterday I ... (max 5 words)","ru":"Русский перевод начала","tip":"Совет: используй простые слова","phonetic":"","example":"Example continuation"}` }
+};
+
+function setSpeakMode(mode,el){
+  speakMode=mode;
+  document.querySelectorAll('#tab-speaking .topic-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  loadSpeakPrompt();
+}
+
+async function loadSpeakPrompt(){
+  currentSpeakPrompt=null;
+  const enEl=document.getElementById('speakPromptEn');
+  const ruEl=document.getElementById('speakPromptRu');
+  const tipEl=document.getElementById('speakPromptTip');
+  document.getElementById('transcriptBox').style.display='none';
+  document.getElementById('speakFeedback').style.display='none';
+  document.getElementById('scoreSection').style.display='none';
+  enEl.innerHTML='<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
+  ruEl.textContent='';tipEl.textContent='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:SPEAK_MODES[speakMode].prompt}]})
+    });
+    const data=await res.json();
+    let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
+    currentSpeakPrompt=JSON.parse(raw);
+    enEl.textContent=currentSpeakPrompt.en;
+    ruEl.textContent='🇷🇺 '+currentSpeakPrompt.ru;
+    const parts=[];
+    if(currentSpeakPrompt.phonetic)parts.push('🔤 '+currentSpeakPrompt.phonetic);
+    if(currentSpeakPrompt.example) parts.push('💡 e.g.: '+currentSpeakPrompt.example);
+    tipEl.textContent=parts.join('  |  ');
+  }catch(e){enEl.textContent='Could not load. Tap ⟳ to retry.';}
+}
+
+function listenPhrase(){
+  if(!currentSpeakPrompt)return;
+  const u=new SpeechSynthesisUtterance(currentSpeakPrompt.en);
+  u.lang='en-US';u.rate=0.85;u.pitch=1;
+  const vs=speechSynthesis.getVoices();
+  const v=vs.find(v=>v.lang.startsWith('en')&&v.name.includes('Google'))||vs.find(v=>v.lang.startsWith('en-US'))||vs.find(v=>v.lang.startsWith('en'));
+  if(v)u.voice=v;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+  const btn=document.getElementById('listenBtn');
+  btn.textContent='🔊 Playing…';
+  u.onend=()=>{btn.textContent='🔊 Listen';};
+}
+
+function toggleRecord(){isRecording?stopRecord():startRecord();}
+
+function startRecord(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Use Google Chrome!\n\nИспользуйте Google Chrome!');return;}
+  if(!currentSpeakPrompt){loadSpeakPrompt();return;}
+  recognition=new SR();
+  recognition.lang='en-US';recognition.continuous=false;recognition.interimResults=false;recognition.maxAlternatives=3;
+  recognition.onstart=()=>{
+    isRecording=true;
+    const btn=document.getElementById('recordBtn');
+    btn.textContent='⏹ Stop';btn.classList.remove('yellow');btn.classList.add('red');
+    document.getElementById('recordingIndicator').style.display='block';
+    document.getElementById('transcriptBox').style.display='none';
+    document.getElementById('speakFeedback').style.display='none';
+    document.getElementById('scoreSection').style.display='none';
+  };
+  recognition.onresult=(e)=>handleTranscript(e.results[0][0].transcript,e.results[0][0].confidence);
+  recognition.onerror=(e)=>{
+    stopRecord();
+    const fb=document.getElementById('speakFeedback');fb.style.display='block';
+    if(e.error==='no-speech')fb.innerHTML=`<div class="feedback-box bad">🎤 No speech — speak louder!<br><span style="font-size:.76rem;">🇷🇺 Говорите громче!</span></div>`;
+    else if(e.error==='not-allowed')fb.innerHTML=`<div class="feedback-box bad">❌ Allow microphone in browser!<br><span style="font-size:.76rem;">🇷🇺 Разрешите доступ к микрофону.</span></div>`;
+    else fb.innerHTML=`<div class="feedback-box bad">⚠️ Error: ${e.error}. Try again!</div>`;
+  };
+  recognition.onend=()=>stopRecord();
+  recognition.start();
+}
+
+function stopRecord(){
+  isRecording=false;
+  if(recognition){try{recognition.stop();}catch(e){}recognition=null;}
+  const btn=document.getElementById('recordBtn');
+  btn.textContent='🎤 Speak!';btn.classList.remove('red');btn.classList.add('yellow');
+  document.getElementById('recordingIndicator').style.display='none';
+}
+
+async function handleTranscript(transcript){
+  document.getElementById('transcriptBox').style.display='block';
+  document.getElementById('transcriptText').textContent=transcript;
+  const fb=document.getElementById('speakFeedback');
+  fb.style.display='block';
+  fb.innerHTML=`<div class="speak-fb-card"><span class="dots"><span>●</span><span>●</span><span>●</span></span> Analysing…</div>`;
+  const evalPrompt=`You are an English pronunciation coach for a 13-year-old Russian speaker (A1-A2 level).
+Target phrase: "${currentSpeakPrompt.en}"
+Student said: "${transcript}"
+Mode: ${speakMode}
+Return ONLY JSON: {"score":<0-100>,"scoreLabel":"<Excellent|Good|Almost|Try Again>","pronunciation":"<1 sentence English>","accuracy":"<1 sentence>","improvement":"<1 tip English + Russian>","encouragement":"<short teen-friendly phrase>"}
+Be generous. Score 80+ if meaning conveyed. Score: accuracy 40%, intelligibility 40%, effort 20%.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:evalPrompt}]})
+    });
+    const data=await res.json();
+    let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
+    const ev=JSON.parse(raw);
+    speakStats.attempts++;speakStats.scores.push(ev.score);
+    if(ev.score>speakStats.best)speakStats.best=ev.score;
+    saveSpeak(speakStats);
+    updateSpeakStats();
+    const sc=ev.score>=80?'var(--bs-green)':ev.score>=60?'var(--bs-yellow)':'var(--bs-red)';
+    document.getElementById('scoreSection').style.display='block';
+    document.getElementById('scoreNum').textContent=ev.score+'/100';
+    document.getElementById('scoreNum').style.color=sc;
+    document.getElementById('scoreFill').style.width=ev.score+'%';
+    document.getElementById('scoreFill').style.background=`linear-gradient(90deg,var(--bs-orange),${sc})`;
+    document.getElementById('scoreLabel').textContent=ev.scoreLabel;
+    fb.innerHTML=`<div class="speak-fb-card">
+      <div class="fb-section"><div class="fb-label">🎙️ Pronunciation</div><div>${ev.pronunciation}</div></div>
+      <div class="fb-section"><div class="fb-label">🎯 Accuracy</div><div>${ev.accuracy}</div></div>
+      <div class="fb-section"><div class="fb-label">📈 Improve</div><div>${ev.improvement}</div></div>
+      <div style="margin-top:10px;padding:9px 12px;background:rgba(255,226,52,.1);border:1.5px solid rgba(255,226,52,.3);border-radius:10px;color:var(--bs-yellow);font-weight:800;font-size:.84rem;">🌟 ${ev.encouragement}</div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="bs-btn yellow" onclick="startRecord()">🔁 Try Again</button>
+        <button class="bs-btn blue"   onclick="loadSpeakPrompt()">Next →</button>
+      </div></div>`;
+    addXP(ev.score>=80?15:ev.score>=60?10:5);
+    state.exercises++;save();
+  }catch(e){fb.innerHTML=`<div class="feedback-box bad">Could not analyse. Try again!</div>`;}
+}
+
+function updateSpeakStats(){
+  document.getElementById('spAttempts').textContent=speakStats.attempts;
+  const avg=speakStats.scores.length?Math.round(speakStats.scores.reduce((a,b)=>a+b,0)/speakStats.scores.length):null;
+  document.getElementById('spAvg').textContent=avg!==null?avg+'%':'—';
+  document.getElementById('spBest').textContent=speakStats.best?speakStats.best+'%':'—';
+}
+
+// ══════════════════════════════════════════
+// INIT — load from cloud then boot
+// ══════════════════════════════════════════
+window._speakLoaded=false;
+
+async function initApp(){
+  showLoader('Loading your progress…');
+  try{
+    // load main state
+    const sr = await window.storage.get('eq_state');
+    if(sr && sr.value){
+      const loaded = JSON.parse(sr.value);
+      state = Object.assign({...DEFAULT_STATE}, loaded);
+    }
+  }catch(e){ /* first time — use defaults */ }
+
+  try{
+    // load speak stats
+    const sk = await window.storage.get('eq_speak');
+    if(sk && sk.value){
+      speakStats = Object.assign({...DEFAULT_SPEAK}, JSON.parse(sk.value));
+    }
+  }catch(e){ /* first time */ }
+
+  hideLoader();
+  updateHeader(); updateProgress(); updateSpeakStats();
+
+  if(speechSynthesis.onvoiceschanged!==undefined)
+    speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+
+  // show returning vs new greeting
+  const isReturning = state.msgs > 0;
+  if(isReturning){
+    appendMsg('ai',`Welcome back! 👋 Ready to keep practising? You have <strong>${state.xp} XP</strong> and your level is <strong>${state.level}</strong>. Let's go! 💪<br><br>
+🇷🇺 <span style="color:var(--bs-yellow);font-style:italic;">С возвращением! Продолжим учить английский?</span><br><br>
+<strong>What did you do today?</strong> 😊`,'🤖');
+  } else {
+    appendMsg('ai',`Hi! 👋 I'm <strong>Max</strong>, your English teacher!<br><br>
+Let's practice every day. Write in English <em>or</em> Russian!<br><br>
+🇷🇺 <span style="color:var(--bs-yellow);font-style:italic;">Привет! Я твой учитель английского. Пиши по-английски или по-русски — я помогу!</span><br><br>
+Tell me: <strong>What do you like to do after school?</strong> 😊`,'🤖');
+  }
+  loadWordOfDay();
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
