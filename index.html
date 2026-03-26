@@ -536,7 +536,32 @@ header {
 
 <script>
 // ══════════════════════════════════════════
-// STATE + CLOUD STORAGE
+// API KEY
+// ══════════════════════════════════════════
+function getKey(){ return localStorage.getItem('eq_apikey')||''; }
+function setKey(k){ localStorage.setItem('eq_apikey', k.trim()); }
+
+// Central fetch wrapper — injects the key
+async function apiFetch(body){
+  const key = getKey();
+  if(!key) throw new Error('NO_KEY');
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body: JSON.stringify(body)
+  });
+  if(res.status===401) throw new Error('BAD_KEY');
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return res;
+}
+
+// ══════════════════════════════════════════
+// STATE + STORAGE (localStorage with cloud fallback)
 // ══════════════════════════════════════════
 const DEFAULT_STATE = {xp:0,level:'A1',streak:0,msgs:0,exercises:0,correct:0,words:{},lastDay:null,chatHistory:[]};
 const DEFAULT_SPEAK = {attempts:0,scores:[],best:0};
@@ -546,29 +571,29 @@ let currentTopic='Free talk', exLoading=false;
 const LEVELS=['A1','A2','B1','B2'];
 const XP_PER_LEVEL=[0,200,600,1400];
 
-// ── Cloud save (debounced so rapid XP gains don't spam) ──
 let _saveTimer=null;
 function save(){
   clearTimeout(_saveTimer);
-  _saveTimer=setTimeout(async()=>{
-    try{ await window.storage.set('eq_state', JSON.stringify(state)); }
-    catch(e){ /* fallback silent */ }
-  }, 800);
+  _saveTimer=setTimeout(()=>{
+    localStorage.setItem('eq_state', JSON.stringify(state));
+    try{ window.storage?.set('eq_state', JSON.stringify(state)); }catch(e){}
+  }, 600);
 }
 
-async function saveSpeak(spk){
-  try{ await window.storage.set('eq_speak', JSON.stringify(spk)); }catch(e){}
+function saveSpeak(spk){
+  localStorage.setItem('eq_speak', JSON.stringify(spk));
+  try{ window.storage?.set('eq_speak', JSON.stringify(spk)); }catch(e){}
 }
 
-// ── Show/hide loading overlay ──
+// ── Loading overlay ──
 function showLoader(msg){
   let el=document.getElementById('cloudLoader');
   if(!el){
-    el=document.createElement('div');el.id='cloudLoader';
+    el=document.createElement('div'); el.id='cloudLoader';
     el.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1034;font-family:"Lilita One",cursive;';
     el.innerHTML=`<div style="font-size:3rem;margin-bottom:12px;animation:spin 1.5s linear infinite;">⚡</div>
       <div style="font-size:1.2rem;color:#ffe234;-webkit-text-stroke:1.5px #000;text-shadow:2px 2px 0 #000;" id="loaderMsg">Loading…</div>
-      <div style="font-size:.8rem;color:#b8a8e0;margin-top:8px;">Syncing your progress from the cloud</div>
+      <div style="font-size:.8rem;color:#b8a8e0;margin-top:8px;">English Brawl</div>
       <style>@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style>`;
     document.body.appendChild(el);
   }
@@ -576,6 +601,135 @@ function showLoader(msg){
   el.style.display='flex';
 }
 function hideLoader(){ const el=document.getElementById('cloudLoader'); if(el) el.style.display='none'; }
+
+// ══════════════════════════════════════════
+// API KEY SCREEN
+// ══════════════════════════════════════════
+function showKeyScreen(){
+  hideLoader();
+  let el=document.getElementById('keyScreen');
+  if(el){ el.style.display='flex'; return; }
+  el=document.createElement('div'); el.id='keyScreen';
+  el.style.cssText=`position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;background:#1a1034;
+    font-family:'Nunito',sans-serif;padding:24px;`;
+  el.innerHTML=`
+    <div style="max-width:420px;width:100%;text-align:center;">
+      <div style="font-family:'Lilita One',cursive;font-size:2.2rem;color:#ffe234;
+        -webkit-text-stroke:2px #000;text-shadow:3px 3px 0 #000;margin-bottom:6px;">⚡ EnglishBrawl</div>
+      <div style="font-size:.9rem;color:#b8a8e0;margin-bottom:24px;">Your AI English Tutor</div>
+
+      <div style="background:linear-gradient(180deg,#3a2478,#2a1860);border:3px solid #4a328a;
+        border-radius:18px;padding:22px;box-shadow:0 6px 0 #0d0820;text-align:left;">
+
+        <div style="font-family:'Lilita One',cursive;font-size:1.05rem;color:#ffe234;
+          -webkit-text-stroke:1px #000;margin-bottom:10px;">🔑 Enter API Key</div>
+
+        <p style="font-size:.82rem;color:#b8a8e0;margin-bottom:14px;line-height:1.6;">
+          To use this tutor you need a free Anthropic API key.<br>
+          <span style="color:#ffe234;font-weight:800;">🇷🇺 Для работы нужен бесплатный API ключ.</span>
+        </p>
+
+        <div style="background:rgba(255,226,52,.08);border:1.5px solid rgba(255,226,52,.25);
+          border-radius:10px;padding:12px;margin-bottom:14px;font-size:.8rem;color:#b8a8e0;line-height:1.7;">
+          <strong style="color:#ffe234;">How to get your key (free):</strong><br>
+          1. Go to <a href="https://console.anthropic.com" target="_blank"
+            style="color:#3cb0ff;">console.anthropic.com</a><br>
+          2. Sign up / Log in<br>
+          3. Click <strong style="color:#fff;">"API Keys"</strong> → <strong style="color:#fff;">"Create Key"</strong><br>
+          4. Copy the key (starts with <code style="color:#4cff72;">sk-ant-...</code>)<br>
+          5. Paste it below ↓<br><br>
+          <span style="color:#ffe234;">🇷🇺 Зарегистрируйтесь на console.anthropic.com, создайте ключ и вставьте сюда.</span>
+        </div>
+
+        <input id="keyInput" type="password"
+          placeholder="sk-ant-api03-..."
+          style="width:100%;background:linear-gradient(180deg,#1e1048,#180c38);
+            border:2.5px solid #4a328a;border-radius:12px;padding:11px 13px;
+            color:#fff8e7;font-family:'Nunito',sans-serif;font-size:.9rem;
+            outline:none;margin-bottom:10px;transition:border .2s;"
+          onkeydown="if(event.key==='Enter')tryKey()"
+          onfocus="this.style.borderColor='#ffe234'"
+          onblur="this.style.borderColor='#4a328a'">
+
+        <div id="keyError" style="font-size:.78rem;color:#ff7070;margin-bottom:8px;display:none;font-weight:800;"></div>
+
+        <button onclick="tryKey()" id="keyBtn"
+          style="width:100%;font-family:'Lilita One',cursive;font-size:1rem;
+            padding:12px;border-radius:12px;border:2.5px solid #000;
+            background:linear-gradient(180deg,#ffe234,#f0a800);color:#000;
+            cursor:pointer;box-shadow:0 4px 0 #000;transition:all .1s;letter-spacing:.3px;">
+          ⚡ START LEARNING!
+        </button>
+
+        <p style="font-size:.72rem;color:#5a3aaa;margin-top:10px;text-align:center;line-height:1.5;">
+          🔒 Your key is saved only in this browser — never shared.<br>
+          🇷🇺 Ключ хранится только в вашем браузере.
+        </p>
+      </div>
+
+      <button onclick="showKeyScreen_change()" style="margin-top:14px;font-size:.75rem;
+        color:#5a3aaa;background:none;border:none;cursor:pointer;text-decoration:underline;">
+        Already have a key saved? Click to change it
+      </button>
+    </div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>document.getElementById('keyInput')?.focus(),100);
+}
+
+function hideKeyScreen(){ const el=document.getElementById('keyScreen'); if(el) el.style.display='none'; }
+
+function showKeyScreen_change(){
+  localStorage.removeItem('eq_apikey');
+  showKeyScreen();
+}
+
+async function tryKey(){
+  const input=document.getElementById('keyInput');
+  const btn=document.getElementById('keyBtn');
+  const errEl=document.getElementById('keyError');
+  const key=(input?.value||'').trim();
+
+  if(!key||!key.startsWith('sk-ant')){
+    errEl.textContent='❌ Key must start with sk-ant-...'; errEl.style.display='block'; return;
+  }
+
+  btn.textContent='⚡ Checking…'; btn.style.opacity='.7';
+  errEl.style.display='none';
+
+  // Quick validation ping
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:5,messages:[{role:'user',content:'hi'}]})
+    });
+    if(res.status===401){throw new Error('BAD_KEY');}
+    if(!res.ok&&res.status!==400){throw new Error('HTTP '+res.status);}
+    // 400 is fine — it means the API is reachable, key is valid (bad request format)
+    setKey(key);
+    hideKeyScreen();
+    bootApp();
+  }catch(e){
+    btn.textContent='⚡ START LEARNING!'; btn.style.opacity='1';
+    if(e.message==='BAD_KEY'||e.message==='HTTP 401'){
+      errEl.textContent='❌ Invalid key. Check and try again. / Неверный ключ.';
+    } else if(e.message.includes('fetch')||e.message.includes('NetworkError')){
+      errEl.textContent='❌ No internet connection.';
+    } else {
+      // Key likely valid but some other error — proceed anyway
+      setKey(key);
+      hideKeyScreen();
+      bootApp();
+    }
+    errEl.style.display='block';
+  }
+}
 
 function addXP(n){
   state.xp+=n;
@@ -688,16 +842,12 @@ async function sendChat(){
   if(state.chatHistory.length>6)state.chatHistory=state.chatHistory.slice(-6);
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
+    const res=await apiFetch({
         model:'claude-haiku-4-5-20251001',
         max_tokens:300,
         stream:true,
         system:SYSTEM_PROMPT+currentTopic,
         messages:state.chatHistory
-      })
     });
 
     if(!res.ok){throw new Error('HTTP '+res.status);}
@@ -737,7 +887,12 @@ async function sendChat(){
     save();
     addXP(3);
   }catch(e){
-    bubble.innerHTML=`<span style="color:#ff7070;">⚠️ Connection error. Please try again!<br><span style="font-size:.75rem;color:var(--bs-muted);">${e.message}</span></span>`;
+    if(e.message==='NO_KEY'||e.message==='BAD_KEY'){
+      bubble.innerHTML=`<span style="color:#ff7070;">🔑 API key needed!<br>
+        <button class="bs-btn yellow" style="margin-top:8px;font-size:.78rem;padding:7px 14px;" onclick="showKeyScreen()">Enter API Key</button></span>`;
+    } else {
+      bubble.innerHTML=`<span style="color:#ff7070;">⚠️ Connection error. Try again!<br><span style="font-size:.72rem;color:var(--bs-muted);">${e.message}</span></span>`;
+    }
   }
   document.getElementById('sendBtn').disabled=false;
   updateHeader();
@@ -782,16 +937,19 @@ For "fill": {"type":"fill","ru":"Перевод предложения","sentenc
 For "translate": {"type":"translate","ru":"Русское предложение для перевода","english":"Correct English translation","hint":"Grammar tip in Russian"}
 Keep it simple. A1-A2 level. Topics: school, food, sport, daily life, hobbies, numbers, colors, family.`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
-    });
+    const res=await apiFetch({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]});
     const data=await res.json();
     let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
     currentEx=JSON.parse(raw);
     renderExercise(currentEx,exC,exB);
     state.exercises++;save();updateProgress();
-  }catch(e){exC.innerHTML='<div style="color:var(--bs-red);">Could not load. Try again!</div>';}
+  }catch(e){
+    if(e.message==='NO_KEY'||e.message==='BAD_KEY'){
+      exC.innerHTML=`<div style="color:#ff7070;">🔑 API key needed! <button class="bs-btn yellow" style="font-size:.78rem;padding:7px 14px;" onclick="showKeyScreen()">Enter Key</button></div>`;
+    } else {
+      exC.innerHTML='<div style="color:var(--bs-red);">Could not load. Try again!</div>';
+    }
+  }
   exLoading=false;
 }
 
@@ -874,12 +1032,9 @@ function practiceWord(en,ru){
 async function loadWordOfDay(){
   const wotd=document.getElementById('wotd');
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,
-        messages:[{role:'user',content:`Give a "word of the day" for a Russian 13-year-old learning English at A1-A2.
-Return ONLY JSON: {"word":"English word","translation":"Русский перевод","example":"Simple English example sentence","tip":"Short memory tip in Russian"}`}]})
-    });
+    const res=await apiFetch({model:'claude-haiku-4-5-20251001',max_tokens:200,
+      messages:[{role:'user',content:`Give a "word of the day" for a Russian 13-year-old learning English at A1-A2.
+Return ONLY JSON: {"word":"English word","translation":"Русский перевод","example":"Simple English example sentence","tip":"Short memory tip in Russian"}`}]});
     const data=await res.json();
     let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
     const w=JSON.parse(raw);
@@ -931,10 +1086,7 @@ async function loadSpeakPrompt(){
   enEl.innerHTML='<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
   ruEl.textContent='';tipEl.textContent='';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:SPEAK_MODES[speakMode].prompt}]})
-    });
+    const res=await apiFetch({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:SPEAK_MODES[speakMode].prompt}]});
     const data=await res.json();
     let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
     currentSpeakPrompt=JSON.parse(raw);
@@ -1010,10 +1162,7 @@ Mode: ${speakMode}
 Return ONLY JSON: {"score":<0-100>,"scoreLabel":"<Excellent|Good|Almost|Try Again>","pronunciation":"<1 sentence English>","accuracy":"<1 sentence>","improvement":"<1 tip English + Russian>","encouragement":"<short teen-friendly phrase>"}
 Be generous. Score 80+ if meaning conveyed. Score: accuracy 40%, intelligibility 40%, effort 20%.`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:evalPrompt}]})
-    });
+    const res=await apiFetch({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:evalPrompt}]});
     const data=await res.json();
     let raw=data.content.map(b=>b.type==='text'?b.text:'').join('').replace(/```json|```/g,'').trim();
     const ev=JSON.parse(raw);
@@ -1050,48 +1199,41 @@ function updateSpeakStats(){
 }
 
 // ══════════════════════════════════════════
-// INIT — load from cloud then boot
+// INIT
 // ══════════════════════════════════════════
 window._speakLoaded=false;
 
-async function initApp(){
-  showLoader('Loading your progress…');
-  try{
-    // load main state
-    const sr = await window.storage.get('eq_state');
-    if(sr && sr.value){
-      const loaded = JSON.parse(sr.value);
-      state = Object.assign({...DEFAULT_STATE}, loaded);
-    }
-  }catch(e){ /* first time — use defaults */ }
+async function loadProgress(){
+  try{ const s=localStorage.getItem('eq_state'); if(s) state=Object.assign({...DEFAULT_STATE},JSON.parse(s)); }catch(e){}
+  try{ const sk=localStorage.getItem('eq_speak'); if(sk) speakStats=Object.assign({...DEFAULT_SPEAK},JSON.parse(sk)); }catch(e){}
+  try{ const sr=await window.storage?.get('eq_state'); if(sr?.value){const c=JSON.parse(sr.value);if((c.xp||0)>=(state.xp||0))state=Object.assign({...DEFAULT_STATE},c);} }catch(e){}
+  try{ const sk2=await window.storage?.get('eq_speak'); if(sk2?.value){const c=JSON.parse(sk2.value);if((c.attempts||0)>=(speakStats.attempts||0))speakStats=Object.assign({...DEFAULT_SPEAK},c);} }catch(e){}
+}
 
-  try{
-    // load speak stats
-    const sk = await window.storage.get('eq_speak');
-    if(sk && sk.value){
-      speakStats = Object.assign({...DEFAULT_SPEAK}, JSON.parse(sk.value));
-    }
-  }catch(e){ /* first time */ }
-
+function bootApp(){
   hideLoader();
   updateHeader(); updateProgress(); updateSpeakStats();
-
   if(speechSynthesis.onvoiceschanged!==undefined)
     speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
-
-  // show returning vs new greeting
-  const isReturning = state.msgs > 0;
+  const isReturning=state.msgs>0;
   if(isReturning){
-    appendMsg('ai',`Welcome back! 👋 Ready to keep practising? You have <strong>${state.xp} XP</strong> and your level is <strong>${state.level}</strong>. Let's go! 💪<br><br>
+    appendMsg('ai',`Welcome back! 👋 You have <strong>${state.xp} XP</strong> — Level <strong>${state.level}</strong>. Let’s go! 💪<br><br>
 🇷🇺 <span style="color:var(--bs-yellow);font-style:italic;">С возвращением! Продолжим учить английский?</span><br><br>
 <strong>What did you do today?</strong> 😊`,'🤖');
-  } else {
-    appendMsg('ai',`Hi! 👋 I'm <strong>Max</strong>, your English teacher!<br><br>
-Let's practice every day. Write in English <em>or</em> Russian!<br><br>
+  }else{
+    appendMsg('ai',`Hi! 👋 I’m <strong>Max</strong>, your English teacher!<br><br>
+Let’s practice every day. Write in English <em>or</em> Russian!<br><br>
 🇷🇺 <span style="color:var(--bs-yellow);font-style:italic;">Привет! Я твой учитель английского. Пиши по-английски или по-русски — я помогу!</span><br><br>
 Tell me: <strong>What do you like to do after school?</strong> 😊`,'🤖');
   }
   loadWordOfDay();
+}
+
+async function initApp(){
+  showLoader('Loading…');
+  await loadProgress();
+  if(!getKey()){ showKeyScreen(); }
+  else { bootApp(); }
 }
 
 window.addEventListener('DOMContentLoaded', initApp);
