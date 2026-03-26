@@ -555,8 +555,7 @@ async function apiFetch(body){
     },
     body: JSON.stringify(body)
   });
-  if(res.status===401) throw new Error('BAD_KEY');
-  if(!res.ok) throw new Error('HTTP '+res.status);
+  if(res.status===401||res.status===403) throw new Error('BAD_KEY');
   return res;
 }
 
@@ -694,38 +693,40 @@ async function tryKey(){
     errEl.textContent='❌ Key must start with sk-ant-...'; errEl.style.display='block'; return;
   }
 
-  btn.textContent='⚡ Checking…'; btn.style.opacity='.7';
-  errEl.style.display='none';
+  btn.textContent='⚡ Checking…'; btn.style.opacity='.7'; errEl.style.display='none';
 
-  // Quick validation ping
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'x-api-key':key,
+        'x-api-key': key,
         'anthropic-version':'2023-06-01',
         'anthropic-dangerous-direct-browser-access':'true'
       },
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:5,messages:[{role:'user',content:'hi'}]})
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:10,
+        messages:[{role:'user',content:'Say OK'}]
+      })
     });
-    if(res.status===401){throw new Error('BAD_KEY');}
-    if(!res.ok&&res.status!==400){throw new Error('HTTP '+res.status);}
-    // 400 is fine — it means the API is reachable, key is valid (bad request format)
+
+    if(res.status===401||res.status===403){
+      throw new Error('BAD_KEY');
+    }
+    // Any 2xx or even 4xx other than 401/403 means the key is valid and API is reachable
     setKey(key);
     hideKeyScreen();
     bootApp();
+
   }catch(e){
     btn.textContent='⚡ START LEARNING!'; btn.style.opacity='1';
-    if(e.message==='BAD_KEY'||e.message==='HTTP 401'){
-      errEl.textContent='❌ Invalid key. Check and try again. / Неверный ключ.';
-    } else if(e.message.includes('fetch')||e.message.includes('NetworkError')){
-      errEl.textContent='❌ No internet connection.';
+    if(e.message==='BAD_KEY'){
+      errEl.textContent='❌ Invalid key. Please check and try again. / Неверный ключ.';
+    } else if(e.name==='TypeError'){
+      errEl.textContent='❌ No internet connection / Нет интернета.';
     } else {
-      // Key likely valid but some other error — proceed anyway
-      setKey(key);
-      hideKeyScreen();
-      bootApp();
+      errEl.textContent='❌ Error: '+e.message;
     }
     errEl.style.display='block';
   }
@@ -838,60 +839,30 @@ async function sendChat(){
   const bubble=loadEl.querySelector('.bubble');
 
   state.chatHistory.push({role:'user',content:msg});
-  // Keep only last 6 messages to stay fast
-  if(state.chatHistory.length>6)state.chatHistory=state.chatHistory.slice(-6);
+  if(state.chatHistory.length>6) state.chatHistory=state.chatHistory.slice(-6);
 
   try{
-    const res=await apiFetch({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:300,
-        stream:true,
-        system:SYSTEM_PROMPT+currentTopic,
-        messages:state.chatHistory
+    const res = await apiFetch({
+      model:'claude-haiku-4-5-20251001',
+      max_tokens:300,
+      system:SYSTEM_PROMPT+currentTopic,
+      messages:state.chatHistory
     });
-
-    if(!res.ok){throw new Error('HTTP '+res.status);}
-
-    // Stream the response word by word
-    const reader=res.body.getReader();
-    const decoder=new TextDecoder();
-    let fullReply='';
-    bubble.innerHTML='';
-
-    while(true){
-      const{done,value}=await reader.read();
-      if(done)break;
-      const chunk=decoder.decode(value,{stream:true});
-      const lines=chunk.split('\n');
-      for(const line of lines){
-        if(!line.startsWith('data: '))continue;
-        const data=line.slice(6).trim();
-        if(data==='[DONE]')continue;
-        try{
-          const evt=JSON.parse(data);
-          if(evt.type==='content_block_delta'&&evt.delta?.type==='text_delta'){
-            fullReply+=evt.delta.text;
-            bubble.innerHTML=formatMsg(fullReply);
-            // auto-scroll
-            const box=document.getElementById('chatBox');
-            box.scrollTop=box.scrollHeight;
-          }
-        }catch(e){}
-      }
-    }
-
-    if(!fullReply){throw new Error('Empty response');}
-    state.chatHistory.push({role:'assistant',content:fullReply});save();
-    const vm=[...fullReply.matchAll(/\*\*(.+?)\*\*\s*=\s*([^\n]+)/g)];
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message||'API error');
+    const reply = data.content.map(b=>b.type==='text'?b.text:'').join('');
+    if(!reply) throw new Error('Empty response');
+    state.chatHistory.push({role:'assistant',content:reply});
+    const vm=[...reply.matchAll(/\*\*(.+?)\*\*\s*=\s*([^\n]+)/g)];
     vm.forEach(([,en,ru])=>{const c=en.replace(/[^a-zA-Z\s'-]/g,'').trim().toLowerCase();if(c)state.words[c]=ru.trim();});
     save();
+    bubble.innerHTML=formatMsg(reply);
     addXP(3);
   }catch(e){
     if(e.message==='NO_KEY'||e.message==='BAD_KEY'){
-      bubble.innerHTML=`<span style="color:#ff7070;">🔑 API key needed!<br>
-        <button class="bs-btn yellow" style="margin-top:8px;font-size:.78rem;padding:7px 14px;" onclick="showKeyScreen()">Enter API Key</button></span>`;
+      bubble.innerHTML=`<span style="color:#ff7070;">🔑 API key issue — <button class="bs-btn yellow" style="margin-top:6px;font-size:.78rem;padding:6px 12px;" onclick="showKeyScreen()">Fix Key</button></span>`;
     } else {
-      bubble.innerHTML=`<span style="color:#ff7070;">⚠️ Connection error. Try again!<br><span style="font-size:.72rem;color:var(--bs-muted);">${e.message}</span></span>`;
+      bubble.innerHTML=`<span style="color:#ff7070;">⚠️ Error: ${e.message}<br><span style="font-size:.72rem;color:var(--bs-muted);">Check your API key or internet connection.</span></span>`;
     }
   }
   document.getElementById('sendBtn').disabled=false;
